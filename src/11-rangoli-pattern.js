@@ -37,4 +37,53 @@
  */
 export function rangoli(n) {
   // Your code here
+  if (Number.isNaN(n) || n <= 0 || !Number.isInteger(n)) {
+    return [];
+  }
+
+  const result = [];
+
+  // Top half
+  for (let i = 1; i <= n; i++) {
+    let row = "";
+
+    // Leading spaces
+    for (let j = 0; j < n - i; j++) {
+      row += " ";
+    }
+
+    // Stars
+    for (let j = 1; j <= i; j++) {
+      row += "*";
+
+      if (j < i) {
+        row += " ";
+      }
+    }
+
+    result.push(row);
+  }
+
+  // Bottom half
+  for (let i = n - 1; i >= 1; i--) {
+    let row = "";
+
+    // Leading spaces
+    for (let j = 0; j < n - i; j++) {
+      row += " ";
+    }
+
+    // Stars
+    for (let j = 1; j <= i; j++) {
+      row += "*";
+
+      if (j < i) {
+        row += " ";
+      }
+    }
+
+    result.push(row);
+  }
+
+  return result;
 }

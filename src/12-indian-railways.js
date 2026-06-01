@@ -46,4 +46,83 @@
  */
 export function railwayReservation(passengers, trains) {
   // Your code here
+  if (
+    !Array.isArray(passengers) ||
+    passengers.length <= 0 ||
+    !Array.isArray(trains) ||
+    trains.length <= 0
+  ) {
+    return [];
+  }
+
+  const result = [];
+
+  for (const passenger of passengers) {
+    let trainFound = false;
+
+    const { name, trainNumber, preferred, fallback } = passenger;
+
+    for (const train of trains) {
+      if (train.trainNumber === trainNumber) {
+        trainFound = true;
+
+        if (train.seats[preferred] > 0) {
+          train.seats[preferred] -= 1;
+          result.push({
+            name,
+            trainNumber,
+            class: preferred,
+            status: "confirmed",
+          });
+        } else if (train.seats[fallback] > 0) {
+          train.seats[fallback] -= 1;
+          result.push({
+            name,
+            trainNumber,
+            class: fallback,
+            status: "confirmed",
+          });
+        } else {
+          result.push({
+            name,
+            trainNumber,
+            class: preferred,
+            status: "waitlisted",
+          });
+        }
+        break;
+      }
+    }
+
+    if (!trainFound) {
+      result.push({
+        name,
+        trainNumber,
+        class: null,
+        status: "train_not_found",
+      });
+    }
+  }
+
+  return result;
 }
+
+railwayReservation(
+  [
+    {
+      name: "Rahul",
+      trainNumber: "12345",
+      preferred: "ac3",
+      fallback: "sleeper",
+    },
+  ],
+  [
+    {
+      trainNumber: "12345",
+      name: "Rajdhani",
+      seats: { sleeper: 5, ac3: 0, ac2: 1, ac1: 0 },
+    },
+  ],
+);
+// ac3 has 0 seats, try fallback sleeper (5 seats), allocated!
+// => [{ name: "Rahul", trainNumber: "12345", class: "sleeper", status: "confirmed" }]

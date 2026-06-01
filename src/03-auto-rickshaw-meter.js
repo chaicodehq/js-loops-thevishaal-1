@@ -33,4 +33,37 @@
  */
 export function calculateAutoFare(distance, waitingMinutes = 0) {
   // Your code here
+  if (
+    typeof distance !== "number" ||
+    distance <= 0 ||
+    typeof waitingMinutes !== "number" ||
+    waitingMinutes < 0
+  )
+    return -1;
+
+  const roundOffDistance = Math.ceil(distance);
+  let totalFareCount = 0;
+
+  let i = 1;
+  while (i <= roundOffDistance) {
+    if (i === 1) {
+      totalFareCount += 30;
+    } else if (i <= 5) {
+      totalFareCount += 15;
+    } else {
+      totalFareCount += 10;
+    }
+    i++;
+  }
+
+  const roundOffWaitingMinutes = Math.ceil(waitingMinutes);
+  const pairs = Math.ceil(roundOffWaitingMinutes / 2);
+
+  let j = 1;
+  while (j <= pairs) {
+    totalFareCount += 5;
+    j++;
+  }
+
+  return totalFareCount;
 }
